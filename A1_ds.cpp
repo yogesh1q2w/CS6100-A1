@@ -4,30 +4,30 @@ set<int> sol;
 vector<bool> cov;
 vector<int> deg;
 int ds(unordered_map<int, vector<int>> &adj) {
-    if(adj.size() == 0)
-    return 0;
     int x = 0;
-    for(auto &i:adj) {
-        if(deg[i.first] == 1 && !cov[i.first]) {
-            cov[i.first] = true;
-            sol.insert(adj[i.first][0]);
-            cov[adj[i.first][0]] = true;
-            x++;
-            for(auto &j:adj[adj[i.first][0]]) {
-                cov[j] = true;
-                deg[j]--;
-                if(deg[j] == 0 && j != i.first)
-                    adj.erase(j);
-            }
-            adj.erase(adj[i.first][0]);
-            adj.erase(i.first);
-        }
-        else if(deg[i.first] == 1 && cov[i.first])
-            adj.erase(i.first);
+    while(1) {
         if(adj.size() == 0)
         break;
+        for(auto &i:adj) {
+            if(deg[i.first] == 1 && !cov[i.first]) {
+                cov[i.first] = true;
+                sol.insert(adj[i.first][0]);
+                cov[adj[i.first][0]] = true;
+                x++;
+                for(auto &j:adj[adj[i.first][0]]) {
+                    cov[j] = true;
+                    deg[j]--;
+                    if(deg[j] == 0 && j != i.first)
+                        adj.erase(j);
+                }
+                adj.erase(adj[i.first][0]);
+                adj.erase(i.first);
+            }
+            else if(deg[i.first] == 1 && cov[i.first])
+                adj.erase(i.first);
+        }
     }
-    return x + ds(adj);
+    return x;
 }
 
 int main() {
